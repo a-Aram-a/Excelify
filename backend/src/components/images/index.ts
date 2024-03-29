@@ -1,0 +1,6 @@
+import { Express } from "express";
+import router from "./entry-points/api";
+
+export default (app: Express) => {
+    app.use("/images", router);
+}
