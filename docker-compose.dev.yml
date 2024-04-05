@@ -1,0 +1,36 @@
+version: '3'
+services:
+
+  backend:
+    image: excelify-backend-dev-i
+    container_name: excelify-backend-dev-c
+    build:
+      dockerfile: Dockerfile
+    ports:
+      - "3001:3001"
+    volumes:
+      - ./backend:/backend
+      - node_modules_backend:/backend/node_modules/
+    environment:
+      - NODE_ENV=development
+
+  frontend:
+    image: excelify-frontend-dev-i
+    container_name: excelify-frontend-dev-c
+    build:
+      dockerfile: Dockerfile.dev
+    ports:
+      - "3000:3000"
+    volumes:
+      - ./frontend:/frontend
+      - node_modules_frontend:/frontend/node_modules/
+    environment:
+      - NODE_ENV=development
+
+  db:
+    ports:
+      - "27017:27017"
+
+volumes:
+  node_modules_backend:
+  node_modules_frontend:

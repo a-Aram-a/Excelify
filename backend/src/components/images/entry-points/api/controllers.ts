@@ -55,14 +55,16 @@ export async function imageUploadController(req: Request, res: Response, next: N
         });
 
         ls.stderr.on('data', async (processData) => {
-            console.error(`stderr: ${processData}`);
-            imageTask.status = "failed"
-            imageTask.error = processData.toString()
-            await imageTask.save()
+            if (processData.toString().startsWith("error: ")) {
+                console.error(`stderr: ${processData}`);
+                imageTask.status = "failed"
+                imageTask.error = processData.toString()
+                await imageTask.save()
 
-            fs.unlink(data.imageSrc)
+                fs.unlink(data.imageSrc)
 
-            throw new ApiError(500, processData.toString())
+                throw new ApiError(500, processData.toString())
+            }
         });
 
         ls.on('close', (code) => {
