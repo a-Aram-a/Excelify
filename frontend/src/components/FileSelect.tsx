@@ -57,6 +57,11 @@ function FileSelect() {
         setDragoverClasses("");
     }
 
+    function onChangeFile(e: any) {
+        if(!e.target.files || !e.target.files[0]) return
+        appContext.setSelectedImage(e.target.files[0])
+    }
+
     return (
         <div className="flex flex-col gap-4 cursor-pointer">
             <div className={`border-dashed border-2 border-gray-200 rounded-lg w-full p-4 ${dragoverClasses}`}
@@ -70,8 +75,8 @@ function FileSelect() {
                     <span className="sr-only">Drag and drop your photos here</span>
                 </div>
             </div>
-            <button className="btn btn-neutral w-full" onClick={clickHandler}>Select photo</button>
-            <input type="file" ref={inputFileRef} onChange={(e) => appContext.setSelectedImage(e.target.files![0])} accept={allowedTypes.join(",")} className="hidden" />
+            <button className="btn btn-neutral w-full" disabled={appContext.loading} onClick={clickHandler}>Select photo</button>
+            <input type="file" ref={inputFileRef} onChange={onChangeFile} accept={allowedTypes.join(",")} className="hidden" />
         </div>
     );
 }

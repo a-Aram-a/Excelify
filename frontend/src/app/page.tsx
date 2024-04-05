@@ -1,18 +1,19 @@
 'use client'
-import Image from "next/image";
 import FileSpreadsheetIcon from "@/components/icons/FileSpreadsheetIcon";
-import ImageIcon from "@/components/icons/ImageIcon";
 import { useContext, useState } from "react";
 import { AppContext } from "@/context/app";
 import FileSelect from "@/components/FileSelect";
+import { useImageLoader } from "@/hooks/useImageLoader";
+import ErrorMessage from "@/components/ErrorMessage";
+import SuccessMessage from "@/components/SuccessMessage";
 
 export default function Home() {
-  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const { selectedImage, setSelectedImage, loading, success, error, sendImageRequest } = useImageLoader()
 
   const appContext = useContext(AppContext);
 
   return (
-    <AppContext.Provider value={{ selectedImage, setSelectedImage }}>
+    <AppContext.Provider value={{ selectedImage, setSelectedImage, loading, error }}>
       <main className="text-text">
         <div className="flex flex-col min-h-screen max-w-xl mx-auto">
           <header className="flex items-center justify-center flex-1 flex-col gap-2 p-4 text-center">
@@ -22,11 +23,15 @@ export default function Home() {
               <div className="text-sm text-gray-500 dark:text-gray-400">Convert photos to spreadsheets</div>
             </div>
           </header>
+          <div>
+            { error && <ErrorMessage error={error} /> }
+            { success && <SuccessMessage success={success} /> }
+          </div>
           <div className="flex flex-col gap-4 p-4">
             <FileSelect />
             <div className="flex flex-col gap-2">
-              <button className="btn btn-neutral w-full">Convert to Excel</button>
-              <button className="btn btn-neutral w-full" onClick={() => setSelectedImage(null)}>Clear</button>
+              <button className="btn btn-neutral w-full" disabled={!selectedImage || loading} onClick={sendImageRequest}>Convert to Excel</button>
+              <button className="btn btn-neutral w-full" disabled={!selectedImage || loading} onClick={() => setSelectedImage(null)}>Clear</button>
             </div>
           </div>
         </div>

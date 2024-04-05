@@ -16,7 +16,7 @@ await imageToExcel(
     },
     (err) => {
         if(err) {
-            console.log(`error: ${err}`)
+            console.error(`error: ${err}`)
         } else {
             console.log("done")
         }
@@ -126,6 +126,9 @@ async function imageToExcel(
     }
 
     function rgbToArgb(red, green, blue) {
+        if(!red) red = 0
+        if(!green) green = 0
+        if(!blue) blue = 0
         return `FF${red.toString(16).padStart(2, '0')}${green.toString(16).padStart(2, '0')}${blue.toString(16).padStart(2, '0')}`;
     }
 }
